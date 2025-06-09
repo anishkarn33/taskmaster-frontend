@@ -5,7 +5,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Dashboard from './components/dashboard/Dashboard';
 import Tasks from './components/tasks/Tasks';
-import Analytics from './components/analytics/Analytics';
+import Analytics from './components/analytics/analytics';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
