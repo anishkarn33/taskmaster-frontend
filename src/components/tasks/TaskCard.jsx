@@ -7,7 +7,7 @@ import {
   PlayIcon,
   PauseIcon
 } from '@heroicons/react/24/outline';
-import { format, isAfter, isBefore } from 'date-fns';
+import { format } from 'date-fns';
 
 const TaskCard = ({ task, onEdit, onDelete, onQuickStatusUpdate }) => {
   const getPriorityColor = (priority) => {
