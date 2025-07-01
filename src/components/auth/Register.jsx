@@ -33,7 +33,8 @@ const Register = () => {
     setLoading(true);
     
     try {
-      const { confirmPassword, ...registerData } = formData;
+      const registerData = { ...formData };
+      delete registerData.confirmPassword;
       await register(registerData);
       navigate('/dashboard');
     } catch (error) {
