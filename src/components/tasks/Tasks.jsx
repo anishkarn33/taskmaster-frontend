@@ -106,17 +106,51 @@ const Tasks = () => {
     }
   };
 
-  const handleQuickStatusUpdate = async (id, newStatus) => {
-    try {
-      const task = tasks.find(t => t.id === id);
-      const updatedTask = await tasksService.updateTask(id, { ...task, status: newStatus });
-      setTasks(tasks.map(t => t.id === id ? updatedTask : t));
-      toast.success(`Task marked as ${newStatus.replace('_', ' ')}`);
-    } catch (error) {
-      console.error('Error updating task status:', error);
-      toast.error('Failed to update task status');
+const handleQuickStatusUpdate = async (id, newStatus) => {
+  console.log('=== TASK UPDATE DEBUG ===');
+  console.log('Task ID:', id);
+  console.log('New Status:', newStatus);
+  
+  try {
+    const task = tasks.find(t => t.id === id);
+    console.log('Found task:', task);
+    
+    if (!task) {
+      toast.error('Task not found');
+      return;
     }
-  };
+
+    // Try minimal update first
+    const updateData = {
+      status: newStatus
+    };
+    
+    console.log('Update data:', updateData);
+    console.log('Making API call to update task...');
+
+    const updatedTask = await tasksService.updateTask(id, updateData);
+    console.log('API response:', updatedTask);
+    
+    setTasks(tasks.map(t => t.id === id ? updatedTask : t));
+    toast.success(`Task marked as ${newStatus.replace('_', ' ')}`);
+    
+  } catch (error) {
+    console.log('=== ERROR DETAILS ===');
+    console.error('Full error object:', error);
+    
+    if (error.response) {
+      console.error('Status:', error.response.status);
+      console.error('Data:', error.response.data);
+      console.error('Headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    
+    toast.error('Failed to update task status');
+  }
+};
 
   if (loading) {
     return <Loading text="Loading tasks..." />;
