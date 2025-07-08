@@ -1,174 +1,156 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   PencilIcon, 
   TrashIcon, 
-  ClockIcon,
-  CheckIcon,
-  PlayIcon,
-  PauseIcon
+  CalendarIcon, 
+  UserIcon, 
+  FlagIcon,
+  ChatBubbleLeftIcon
 } from '@heroicons/react/24/outline';
-import { format } from 'date-fns';
 
-const TaskCard = ({ task, onEdit, onDelete, onQuickStatusUpdate }) => {
+const TaskCard = ({ task, onEdit, onDelete, onDragStart, onDragEnd, onClick }) => {
+  const [showActions, setShowActions] = useState(false);
+
+  // ================= HELPER FUNCTIONS =================
   const getPriorityColor = (priority) => {
     const colors = {
-      low: 'badge-low',
-      medium: 'badge-medium',
-      high: 'badge-high',
-      urgent: 'badge-urgent'
+      low: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+      medium: 'bg-amber-50 text-amber-600 border-amber-200',
+      high: 'bg-orange-50 text-orange-600 border-orange-200',
+      urgent: 'bg-red-50 text-red-600 border-red-200'
     };
     return colors[priority] || colors.medium;
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
-      todo: 'badge-todo',
-      in_progress: 'badge-in-progress',
-      completed: 'badge-completed'
-    };
-    return colors[status] || colors.todo;
+  const formatDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const isOverdue = task.due_date && 
-    new Date(task.due_date) < new Date() && 
-    task.status !== 'completed';
+  const isOverdue = (dueDateString) => {
+    if (!dueDateString) return false;
+    return new Date(dueDateString) < new Date() && task.status !== 'completed';
+  };
 
-  const getStatusActions = () => {
-    switch (task.status) {
-      case 'todo':
-        return (
-          <button
-            onClick={() => onQuickStatusUpdate('in_progress')}
-            className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
-            title="Start task"
-          >
-            <PlayIcon className="h-4 w-4" />
-          </button>
-        );
-      case 'in_progress':
-        return (
-          <>
-            <button
-              onClick={() => onQuickStatusUpdate('completed')}
-              className="p-1 text-green-600 hover:text-green-800 transition-colors"
-              title="Complete task"
-            >
-              <CheckIcon className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => onQuickStatusUpdate('todo')}
-              className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
-              title="Pause task"
-            >
-              <PauseIcon className="h-4 w-4" />
-            </button>
-          </>
-        );
-      case 'completed':
-        return (
-          <button
-            onClick={() => onQuickStatusUpdate('todo')}
-            className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
-            title="Reopen task"
-          >
-            <PlayIcon className="h-4 w-4" />
-          </button>
-        );
-      default:
-        return null;
-    }
+  const getAssigneeInitials = (user) => {
+    if (!user) return '?';
+    const name = user.full_name || user.username || 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  const handleCardClick = (e) => {
+    // Prevent click when clicking on action buttons
+    if (e.target.closest('.task-actions')) return;
+    if (onClick) onClick(task);
+  };
+
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    if (onEdit) onEdit(task);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (onDelete) onDelete(task.id);
+  };
+
+  const handleDragStart = (e) => {
+    if (onDragStart) onDragStart(e, task);
+  };
+
+  const handleDragEnd = (e) => {
+    if (onDragEnd) onDragEnd(e);
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg backdrop-blur-sm border transition-all duration-200 card-hover ${
-      isOverdue ? 'border-red-200 dark:border-red-800' : 'border-white/20'
-    }`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          {/* Title and description */}
-          <div className="mb-3">
-            <h3 className={`text-lg font-semibold ${
-              task.status === 'completed' 
-                ? 'text-gray-500 dark:text-gray-400 line-through' 
-                : 'text-gray-900 dark:text-white'
-            }`}>
-              {task.title}
-            </h3>
-            {task.description && (
-              <p className="mt-1 text-gray-600 dark:text-gray-400 text-sm">
-                {task.description}
-              </p>
-            )}
-          </div>
-
-          {/* Badges and metadata */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span className={`badge ${getStatusColor(task.status)}`}>
-              {task.status.replace('_', ' ')}
-            </span>
-            <span className={`badge ${getPriorityColor(task.priority)}`}>
-              {task.priority}
-            </span>
-            
-            {task.due_date && (
-              <span className={`flex items-center text-xs ${
-                isOverdue 
-                  ? 'text-red-600 dark:text-red-400' 
-                  : 'text-gray-500 dark:text-gray-400'
-              }`}>
-                <ClockIcon className="h-4 w-4 mr-1" />
-                {format(new Date(task.due_date), 'MMM dd, yyyy')}
-                {isOverdue && ' (Overdue)'}
-              </span>
-            )}
-
-            {task.completed_at && (
-              <span className="text-xs text-green-600 dark:text-green-400">
-                ✓ Completed {format(new Date(task.completed_at), 'MMM dd')}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center space-x-1 ml-4">
-          {/* Quick status actions */}
-          <div className="flex items-center space-x-1 mr-2">
-            {getStatusActions()}
-          </div>
-          
-          {/* Edit button */}
+    <div 
+      draggable={!!onDragStart}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      className="group relative bg-white rounded-lg border border-gray-200 p-3 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer hover:border-gray-300"
+      onClick={handleCardClick}
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => setShowActions(false)}
+    >
+      {/* Priority Badge and Actions */}
+      <div className="flex items-start justify-between mb-2">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getPriorityColor(task.priority)}`}>
+          <FlagIcon className="h-3 w-3 mr-1" />
+          {task.priority}
+        </span>
+        
+        {/* Action Buttons */}
+        <div className={`task-actions flex items-center space-x-1 transition-opacity duration-200 ${showActions ? 'opacity-100' : 'opacity-0'}`}>
           <button
-            onClick={onEdit}
-            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+            onClick={handleEdit}
+            className="p-1 text-gray-400 hover:text-blue-600 rounded transition-colors"
             title="Edit task"
           >
-            <PencilIcon className="h-5 w-5" />
+            <PencilIcon className="h-4 w-4" />
           </button>
-          
-          {/* Delete button */}
           <button
-            onClick={onDelete}
-            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+            onClick={handleDelete}
+            className="p-1 text-gray-400 hover:text-red-600 rounded transition-colors"
             title="Delete task"
           >
-            <TrashIcon className="h-5 w-5" />
+            <TrashIcon className="h-4 w-4" />
           </button>
         </div>
       </div>
 
-      {/* Progress bar for in-progress tasks */}
-      {task.status === 'in_progress' && (
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
-            <span>In Progress</span>
-            <span>Click ✓ when done</span>
-          </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-            <div className="bg-blue-500 h-2 rounded-full w-1/2 animate-pulse"></div>
-          </div>
-        </div>
+      {/* Task Title */}
+      <h4 className={`text-sm font-medium mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors ${
+        task.status === 'completed' ? 'text-gray-500 line-through' : 'text-gray-900'
+      }`}>
+        {task.title}
+      </h4>
+
+      {/* Description (if exists) */}
+      {task.description && (
+        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+          {task.description}
+        </p>
       )}
+
+      {/* Bottom Section */}
+      <div className="flex items-center justify-between">
+        {/* Left Side - Assignee and Due Date */}
+        <div className="flex items-center space-x-2">
+          {/* Assignee Avatar */}
+          {task.assigned_to ? (
+            <div 
+              className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium"
+              title={task.assigned_to.full_name || task.assigned_to.username}
+            >
+              {getAssigneeInitials(task.assigned_to)}
+            </div>
+          ) : (
+            <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center">
+              <UserIcon className="h-3 w-3 text-gray-400" />
+            </div>
+          )}
+
+          {/* Due Date */}
+          {task.due_date && (
+            <div className={`flex items-center text-xs ${
+              isOverdue(task.due_date) ? 'text-red-600' : 'text-gray-500'
+            }`}>
+              <CalendarIcon className="h-3 w-3 mr-1" />
+              <span>{formatDate(task.due_date)}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Right Side - Task ID and Comments */}
+        <div className="flex items-center space-x-2 text-xs text-gray-400">
+          <div className="flex items-center">
+            <ChatBubbleLeftIcon className="h-3 w-3 mr-1" />
+            <span>{task.comment_count || 0}</span>
+          </div>
+          <span className="font-mono">#{task.id}</span>
+        </div>
+      </div>
     </div>
   );
 };
