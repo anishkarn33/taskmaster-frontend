@@ -269,10 +269,10 @@ const Tasks = () => {
             <p className="mt-1 text-sm text-gray-500 flex items-center space-x-2">
               <span>Full AI automation for task management</span>
               {aiStatus === 'online' && (
-                <span className="text-green-600 font-medium">• 🤖 AI Ready</span>
+                <span className="text-green-600 font-medium">• AI Ready</span>
               )}
               {aiStatus === 'offline' && (
-                <span className="text-red-600 font-medium">• 🤖 AI Offline</span>
+                <span className="text-red-600 font-medium">• AI Offline</span>
               )}
             </p>
           </div>
@@ -285,7 +285,7 @@ const Tasks = () => {
               aiStatus === 'online' ? 'bg-green-500' : 'bg-red-500'
             }`}></div>
             <span className="text-xs text-gray-600">
-              🦙 LLaMA {aiStatus === 'online' ? 'Online' : 'Offline'}
+              LLaMA {aiStatus === 'online' ? 'Online' : 'Offline'}
             </span>
           </div>
 
