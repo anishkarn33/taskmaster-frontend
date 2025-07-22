@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar */
+/* ================= CUSTOM SCROLLBAR ================= */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -19,7 +19,7 @@
   @apply bg-gray-400 dark:bg-gray-500;
 }
 
-/* Custom animations */
+/* ================= ANIMATIONS ================= */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -32,14 +32,43 @@
 }
 
 @keyframes fadeIn {
-  from {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
     opacity: 0;
+    transform: scale(0.95) translateY(-10px);
   }
-  to {
+  to { 
     opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes statusPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes progress-bar-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 1rem 0; }
+}
+
+/* ================= ANIMATION CLASSES ================= */
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
@@ -48,7 +77,15 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Glassmorphism effect */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.status-transition {
+  animation: statusPulse 0.5s ease;
+}
+
+/* ================= GLASS EFFECTS ================= */
 .glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -61,46 +98,23 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Focus styles */
+/* ================= UTILITY CLASSES ================= */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800;
 }
 
-/* Smooth transitions */
 .transition-smooth {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Chart tooltips */
-.recharts-tooltip-wrapper {
-  z-index: 1000;
-}
-
-/* Loading spinner */
-.spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Custom button hover effects */
 .btn-hover {
   @apply transition-all duration-200 transform hover:scale-105 active:scale-95;
 }
 
-/* Card hover effects */
 .card-hover {
   @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
 }
 
-/* Text gradient */
 .text-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -108,12 +122,40 @@
   background-clip: text;
 }
 
-/* Progress animation */
 .progress-bar {
   transition: width 0.5s ease-in-out;
 }
 
-/* Form input styles */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ================= LINE CLAMPING ================= */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ================= FORM COMPONENTS ================= */
 .form-input {
   @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors;
 }
@@ -122,35 +164,352 @@
   @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
 }
 
-/* Status badges */
+.form-select {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white transition-all duration-200;
+}
+
+.form-textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200;
+}
+
+/* ================= BUTTON COMPONENTS ================= */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center gap-2;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+/* ================= BADGE COMPONENTS ================= */
 .badge {
   @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
 }
 
+/* Status Badges */
 .badge-todo {
-  @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200;
 }
 
 .badge-in-progress {
   @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
 }
 
+.badge-in-review {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
 .badge-completed {
   @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
 }
 
+/* Priority Badges */
 .badge-low {
-  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  @apply bg-green-100 text-green-800 border border-green-200;
 }
 
 .badge-medium {
-  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+  @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
 }
 
 .badge-high {
-  @apply bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200;
+  @apply bg-orange-100 text-orange-800 border border-orange-200;
 }
 
 .badge-urgent {
-  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+  @apply bg-red-100 text-red-800 border border-red-200;
+}
+
+/* ================= TASK MANAGEMENT ================= */
+.task-card-compact {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.task-card-compact:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-actions {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.task-card-compact:not(:hover) .task-actions {
+  opacity: 0;
+}
+
+.task-card-compact:hover .task-actions {
+  opacity: 1;
+}
+
+.task-action-btn {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  color: #9ca3af;
+}
+
+.task-action-btn:hover {
+  background-color: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.task-action-btn.edit:hover {
+  color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.task-action-btn.delete:hover {
+  color: #ef4444;
+  background-color: #fef2f2;
+}
+
+/* Priority Indicators */
+.priority-indicator {
+  width: 4px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 0 2px 2px 0;
+}
+
+.priority-low { background-color: #10b981; }
+.priority-medium { background-color: #f59e0b; }
+.priority-high { background-color: #f97316; }
+.priority-urgent { background-color: #ef4444; }
+
+/* Status Indicators */
+.status-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.status-todo { background-color: #6b7280; }
+.status-in-progress { background-color: #3b82f6; }
+.status-in-review { background-color: #8b5cf6; }
+.status-completed { background-color: #10b981; }
+
+/* ================= KANBAN BOARD ================= */
+.kanban-column {
+  min-height: 600px;
+  transition: background-color 0.2s ease;
+}
+
+.kanban-column.drag-over {
+  background-color: rgba(59, 130, 246, 0.05);
+  border-color: #3b82f6;
+}
+
+.kanban-card {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.kanban-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-card.dragging {
+  transform: rotate(5deg) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+/* ================= DRAG AND DROP ================= */
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+[data-rbd-drag-handle-draggable-id] {
+  cursor: grab !important;
+}
+
+[data-rbd-drag-handle-draggable-id]:active {
+  cursor: grabbing !important;
+}
+
+[data-rbd-draggable-context-id] {
+  transition: none !important;
+}
+
+[data-rbd-droppable-id] {
+  transition: background-color 0.2s ease;
+}
+
+[data-rbd-droppable-id].dragging-over {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+[data-rbd-draggable-id][style*="transform"] {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  transform: rotate(2deg) scale(1.02) !important;
+  z-index: 1000 !important;
+}
+
+[data-rbd-placeholder-context-id] {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+  border: 2px dashed #3b82f6 !important;
+  border-radius: 0.5rem !important;
+  opacity: 0.7 !important;
+}
+
+[data-rbd-drag-handle-draggable-id]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ================= MODAL ================= */
+.modal-overlay {
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ================= LOADING STATES ================= */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.task-skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 0.5rem;
+  height: 6rem;
+}
+
+/* ================= AVATAR COLORS ================= */
+.avatar-blue { background-color: #3b82f6; }
+.avatar-green { background-color: #10b981; }
+.avatar-purple { background-color: #8b5cf6; }
+.avatar-pink { background-color: #ec4899; }
+.avatar-yellow { background-color: #f59e0b; }
+.avatar-red { background-color: #ef4444; }
+.avatar-indigo { background-color: #6366f1; }
+.avatar-teal { background-color: #14b8a6; }
+
+.task-avatar {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: white;
+  background-color: #3b82f6;
+}
+
+/* ================= LAYOUT UTILITIES ================= */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.stats-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.stats-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 768px) {
+  .kanban-column {
+    min-height: 400px;
+  }
+  
+  .modal-content {
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+  
+  [data-rbd-draggable-id][style*="transform"] {
+    transform: rotate(1deg) scale(1.01) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .task-card-compact {
+    padding: 0.75rem;
+  }
+  
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .task-avatar {
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.5rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .task-actions {
+    opacity: 1 !important;
+  }
+  
+  .task-card-draggable:hover {
+    transform: none;
+  }
+}
+
+/* ================= PERFORMANCE OPTIMIZATIONS ================= */
+[data-rbd-droppable-id] {
+  will-change: background-color;
+}
+
+[data-rbd-draggable-id] {
+  will-change: transform, box-shadow;
 }
