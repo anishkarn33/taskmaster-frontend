@@ -20,7 +20,7 @@ const AIChat = ({ onTaskCreated, onTaskUpdated, onTaskDeleted, onTaskMoved, isOp
     {
       id: 1,
       type: 'ai',
-      message: "🤖 **Full AI Task Automation Ready!**\n\n✨ **What I can do:**\n• Create: 'Create a high priority task to fix the login bug'\n• Edit: 'Change task #5 priority to high'\n• Move: 'Move the login bug task to in review'\n• Assign: 'Assign task #3 to John'\n• Delete: 'Delete the old meeting task'\n• Search: 'Show me all high priority tasks'\n• Bulk: 'Delete all completed tasks'\n\n🚀 **Try any command in natural language!**",
+      message: "Full AI Task Automation Ready!\n\n✨ What I can do:\n• Create: 'Create a high priority task to fix the login bug'\n• Edit: 'Change task #5 priority to high'\n• Move: 'Move the login bug task to in review'\n• Assign: 'Assign task #3 to John'\n• Delete: 'Delete the old meeting task'\n• Search: 'Show me all high priority tasks'\n• Bulk: 'Delete all completed tasks'\n\n🚀 Try any command in natural language!",
       timestamp: new Date()
     }
   ]);
@@ -405,11 +405,11 @@ const AIChat = ({ onTaskCreated, onTaskUpdated, onTaskDeleted, onTaskMoved, isOp
               <SparklesIcon className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">🤖 AI Task Automation</h3>
+              <h3 className="font-medium text-gray-900"> AI Task Automation</h3>
               <p className={`text-xs ${
                 aiStatus === 'online' ? 'text-green-600' : 'text-red-600'
               }`}>
-                🦙 LLaMA {aiStatus === 'online' ? 'Online' : 'Offline'} • Full Control
+                 LLaMA {aiStatus === 'online' ? 'Online' : 'Offline'} • Full Control
               </p>
             </div>
           </div>
